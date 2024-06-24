@@ -9,10 +9,10 @@ import { HousingService } from '../housing.service';
   standalone: true,
   imports: [CommonModule, HousingLocationComponent],
   template: `
-    <section>
+    <section (keydown.enter)="filterResults(filter.value, $event)">
       <form>
         <input type="text" placeholder="Filter by city" #filter>
-        <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
+        <button class="primary" type="button" (click)="filterResults(filter.value, $event)">Search</button>
       </form>
     </section>
     <section class="results">
@@ -33,8 +33,11 @@ export class HomeComponent {
     });
   }
 
-  filterResults(text: string) {
-    if (!text) this.filteredLocationList = this.housingLocationList;
+  filterResults(text: string, e: Event) {
+    e.preventDefault();
+
+    if (!text) 
+        this.filteredLocationList = this.housingLocationList;
 
     this.filteredLocationList = this.housingLocationList.filter(
       housingLocation => housingLocation?.city.toLowerCase().includes(text.toLowerCase())
